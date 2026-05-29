@@ -1,60 +1,60 @@
-# STM32F103C8T6 giao tiep RFID RC522 qua SPI
+# STM32F103C8T6 giao tiếp RFID RC522 qua SPI
 
-Project nay minh hoa cach su dung module RFID RC522 voi vi dieu khien STM32F103C8T6 thong qua giao tiep SPI. Chuong trinh khoi tao module MFRC522, lien tuc quet the RFID va bat/tat LED PC13 khi doc duoc UID hop le.
+Project này minh họa cách sử dụng module RFID RC522 với vi điều khiển STM32F103C8T6 thông qua giao tiếp SPI. Chương trình khởi tạo module MFRC522, liên tục quét thẻ RFID và bật/tắt LED PC13 khi đọc được UID hợp lệ.
 
-## Noi dung project
+## Nội dung project
 
 ```text
 .
 |-- code/
-|   |-- main.c       # Phan code can chen vao cac vung USER CODE cua STM32CubeIDE
-|   |-- rc522.c      # Driver giao tiep MFRC522 qua SPI HAL
-|   `-- rc522.h      # Khai bao thanh ghi, lenh va ham driver
+|   |-- main.c       # Phần code cần chèn vào các vùng USER CODE của STM32CubeIDE
+|   |-- rc522.c      # Driver giao tiếp MFRC522 qua SPI HAL
+|   `-- rc522.h      # Khai báo thanh ghi, lệnh và hàm driver
 |-- schematic/
 |   |-- schematic.jpg
 |   `-- schematic_easyeda.json
-`-- BAO CAO GIAO TIEP SPI GIUA MODULE RFID RC522 VA STM32F103C8T6.pdf
+`-- BÁO CÁO GIAO TIẾP SPI GIỮA MODULE RFID RC522 VÀ STM32F103C8T6.pdf
 ```
 
-## Phan cung su dung
+## Phần cứng sử dụng
 
 - STM32F103C8T6 Blue Pill
 - Module RFID RC522
-- The/tag RFID Mifare 13.56 MHz
-- Breadboard va day cam
-- Nguon 3.3V
+- Thẻ/tag RFID Mifare 13.56 MHz
+- Breadboard và dây cắm
+- Nguồn 3.3V
 
-> Luu y: RC522 hoat dong muc logic 3.3V. Khong cap 5V truc tiep cho module RC522.
+> Lưu ý: RC522 hoạt động ở mức logic 3.3V. Không cấp 5V trực tiếp cho module RC522.
 
-## Ket noi phan cung
+## Kết nối phần cứng
 
-| RC522 | STM32F103C8T6 | Ghi chu |
+| RC522 | STM32F103C8T6 | Ghi chú |
 | --- | --- | --- |
 | SDA / NSS | PA4 | SPI1 CS |
 | SCK | PA5 | SPI1 SCK |
 | MOSI | PA7 | SPI1 MOSI |
 | MISO | PA6 | SPI1 MISO |
 | RST | PB0 | Reset RC522 |
-| 3.3V | 3.3V | Nguon module |
+| 3.3V | 3.3V | Nguồn module |
 | GND | GND | Mass chung |
 
-LED on-board PC13 duoc dung de bao hieu khi phat hien the.
+LED on-board PC13 được dùng để báo hiệu khi phát hiện thẻ.
 
-## Cau hinh STM32CubeIDE
+## Cấu hình STM32CubeIDE
 
-1. Tao project cho chip `STM32F103C8T6`.
-2. Bat `SPI1` o che do `Full-Duplex Master`.
-3. Cau hinh cac chan:
-   - `PA4`: GPIO Output, dung lam CS/NSS cho RC522.
-   - `PB0`: GPIO Output, dung lam RST cho RC522.
-   - `PC13`: GPIO Output, dieu khien LED on-board.
-4. Generate code bang STM32CubeMX/STM32CubeIDE.
-5. Them `rc522.c` vao thu muc source va `rc522.h` vao thu muc include cua project.
-6. Chen cac phan trong `code/main.c` vao dung vung `USER CODE` cua file `main.c` do CubeIDE tao.
+1. Tạo project cho chip `STM32F103C8T6`.
+2. Bật `SPI1` ở chế độ `Full-Duplex Master`.
+3. Cấu hình các chân:
+   - `PA4`: GPIO Output, dùng làm CS/NSS cho RC522.
+   - `PB0`: GPIO Output, dùng làm RST cho RC522.
+   - `PC13`: GPIO Output, điều khiển LED on-board.
+4. Generate code bằng STM32CubeMX/STM32CubeIDE.
+5. Thêm `rc522.c` vào thư mục source và `rc522.h` vào thư mục include của project.
+6. Chèn các phần trong `code/main.c` vào đúng vùng `USER CODE` của file `main.c` do CubeIDE tạo.
 
-## Cach su dung driver
+## Cách sử dụng driver
 
-Khai bao header va bien luu UID:
+Khai báo header và biến lưu UID:
 
 ```c
 #include "rc522.h"
@@ -63,13 +63,13 @@ uint8_t CardID[5];
 uint8_t status;
 ```
 
-Khoi tao RC522 sau khi HAL va SPI da duoc khoi tao:
+Khởi tạo RC522 sau khi HAL và SPI đã được khởi tạo:
 
 ```c
 MFRC522_Init();
 ```
 
-Trong vong lap chinh, kiem tra the RFID:
+Trong vòng lặp chính, kiểm tra thẻ RFID:
 
 ```c
 status = MFRC522_Check(CardID);
@@ -81,35 +81,35 @@ if (status == MI_OK) {
 }
 ```
 
-Khi co the hop le trong vung doc, ham `MFRC522_Check()` tra ve `MI_OK` va UID 5 byte duoc luu trong mang `CardID`.
+Khi có thẻ hợp lệ trong vùng đọc, hàm `MFRC522_Check()` trả về `MI_OK` và UID 5 byte được lưu trong mảng `CardID`.
 
-## Cac ham chinh
+## Các hàm chính
 
-| Ham | Chuc nang |
+| Hàm | Chức năng |
 | --- | --- |
-| `MFRC522_Init()` | Reset va cau hinh module RC522 |
-| `MFRC522_Check(uint8_t *id)` | Quet the va doc UID |
-| `MFRC522_Request()` | Kiem tra co the trong vung doc hay khong |
-| `MFRC522_Anticoll()` | Doc UID va kiem tra checksum |
-| `MFRC522_Halt()` | Dua the ve trang thai halt |
-| `MFRC522_ReadRegister()` | Doc thanh ghi MFRC522 qua SPI |
+| `MFRC522_Init()` | Reset và cấu hình module RC522 |
+| `MFRC522_Check(uint8_t *id)` | Quét thẻ và đọc UID |
+| `MFRC522_Request()` | Kiểm tra có thẻ trong vùng đọc hay không |
+| `MFRC522_Anticoll()` | Đọc UID và kiểm tra checksum |
+| `MFRC522_Halt()` | Đưa thẻ về trạng thái halt |
+| `MFRC522_ReadRegister()` | Đọc thanh ghi MFRC522 qua SPI |
 | `MFRC522_WriteRegister()` | Ghi thanh ghi MFRC522 qua SPI |
 
-## Kiem tra hoat dong
+## Kiểm tra hoạt động
 
-1. Nap chuong trinh vao STM32F103C8T6.
-2. Dat the RFID gan module RC522.
-3. Neu doc the thanh cong, LED PC13 se sang/tat trong 500 ms.
+1. Nạp chương trình vào STM32F103C8T6.
+2. Đặt thẻ RFID gần module RC522.
+3. Nếu đọc thẻ thành công, LED PC13 sẽ sáng/tắt trong 500 ms.
 
-Neu module khong doc duoc the, hay kiem tra lai:
+Nếu module không đọc được thẻ, hãy kiểm tra lại:
 
-- RC522 da duoc cap dung 3.3V.
-- Chan SPI1 dung voi bang ket noi.
-- Chan CS va RST trong `rc522.h` trung voi cau hinh CubeMX.
-- Day GND cua STM32 va RC522 da noi chung.
+- RC522 đã được cấp đúng 3.3V.
+- Chân SPI1 đúng với bảng kết nối.
+- Chân CS và RST trong `rc522.h` trùng với cấu hình CubeMX.
+- Dây GND của STM32 và RC522 đã nối chung.
 
-## Tai lieu kem theo
+## Tài liệu kèm theo
 
-- So do mach: `schematic/schematic.jpg`
+- Sơ đồ mạch: `schematic/schematic.jpg`
 - File EasyEDA: `schematic/schematic_easyeda.json`
-- Bao cao project: `BAO CAO GIAO TIEP SPI GIUA MODULE RFID RC522 VA STM32F103C8T6.pdf`
+- Báo cáo project: `BÁO CÁO GIAO TIẾP SPI GIỮA MODULE RFID RC522 VÀ STM32F103C8T6.pdf`
