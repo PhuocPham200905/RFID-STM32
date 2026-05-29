@@ -16,7 +16,7 @@ Project nay minh hoa cach su dung module RFID RC522 voi vi dieu khien STM32F103C
 `-- BAO CAO GIAO TIEP SPI GIUA MODULE RFID RC522 VA STM32F103C8T6.pdf
 ```
 
-## Phan cung su dung
+## Phần cứng sử dụng
 
 - STM32F103C8T6 Blue Pill
 - Module RFID RC522
@@ -26,7 +26,7 @@ Project nay minh hoa cach su dung module RFID RC522 voi vi dieu khien STM32F103C
 
 > Luu y: RC522 hoat dong muc logic 3.3V. Khong cap 5V truc tiep cho module RC522.
 
-## Ket noi phan cung
+## Kết nối phần cứng
 
 | RC522 | STM32F103C8T6 | Ghi chu |
 | --- | --- | --- |
@@ -40,7 +40,7 @@ Project nay minh hoa cach su dung module RFID RC522 voi vi dieu khien STM32F103C
 
 LED on-board PC13 duoc dung de bao hieu khi phat hien the.
 
-## Cau hinh STM32CubeIDE
+## Cấu hình STM32CubeIDE
 
 1. Tao project cho chip `STM32F103C8T6`.
 2. Bat `SPI1` o che do `Full-Duplex Master`.
@@ -52,7 +52,7 @@ LED on-board PC13 duoc dung de bao hieu khi phat hien the.
 5. Them `rc522.c` vao thu muc source va `rc522.h` vao thu muc include cua project.
 6. Chen cac phan trong `code/main.c` vao dung vung `USER CODE` cua file `main.c` do CubeIDE tao.
 
-## Cach su dung driver
+## Cách sử dụng driver
 
 Khai bao header va bien luu UID:
 
